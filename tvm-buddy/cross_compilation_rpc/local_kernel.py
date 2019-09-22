@@ -41,12 +41,12 @@ remote.upload(path)
 func = remote.load_module('lib.tar')
 
 ctx = remote.cpu()
-a = tvm.nd.array(np.random.uniform(size=1024).astype(A.type), ctx)
+a = tvm.nd.array(np.random.uniform(size=1024).astype(A.dtype), ctx)
 b = tvm.nd.array(np.zeros(1024, dtype=A.dtype), ctx)
 
 func(a, b)
 
-np.testing.assert_(b.asnumpy(), a.asnumpy() + 1)
+np.testing.assert_equal(b.asnumpy(), a.asnumpy() + 1)
 time_f = func.time_evaluator(func.entry_name, ctx, number=10)
 cost = time_f(a, b).mean
 print('%g secs/op' % cost)
